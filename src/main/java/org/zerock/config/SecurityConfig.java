@@ -61,18 +61,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new CustomAccessDeniedHandler();
 	}
 	
+	/*
 	@Bean
 	public AuthenticationEntryPoint customHttp403ForbiddenEntryPoint() {
 		return new CustomHttp403ForbiddenEntryPoint();
 	}
+	*/
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		//xml에서 url-intercept 역할
 		http.authorizeRequests()
-			.antMatchers("/").permitAll();
-			//.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());
-			//.antMatchers("/test").access("isAuthenticated()");
+			.antMatchers("/").permitAll()
+			.antMatchers("/test").access("isAuthenticated()");
 		
 		//loginPage는 login url, loginProcessingUrl는  login 처리할  url
 		http.formLogin()
@@ -91,10 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.deleteCookies("remember-me", "JESSSION_ID");
 		
 		http.exceptionHandling()
-			.accessDeniedHandler(customAccessDeniedHandler())
-			.and()
-			.exceptionHandling()
-			.authenticationEntryPoint(customHttp403ForbiddenEntryPoint());
+			.accessDeniedHandler(this.customAccessDeniedHandler());
 		
 	}
 	

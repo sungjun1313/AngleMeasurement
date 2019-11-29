@@ -1,11 +1,13 @@
 package org.zerock.domain;
 
-import java.util.Date;
-
 import lombok.Data;
 
 @Data
 public class AngleVO {
 
-	private Date sysdate;
+	private String uuid;
+	private Long bno;
+	private Long angle;
+	private String uploadPath;
+	private String fileName;
 }

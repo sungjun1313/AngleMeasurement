@@ -19,10 +19,12 @@ import lombok.extern.log4j.Log4j;
 public class AngleServiceTests {
 
 	@Setter(onMethod_ = { @Autowired })
-	private AngleService service;
+	private AngleService angleService;
 	
 	@Test
-	public void testGetTime() {
-		log.info(service.getTime());
+	public void testGetList() {
+		log.info("AngleServiceTests testGetList=======================");
+		angleService.getList().forEach(angle -> log.info(angle));
 	}
+	
 }

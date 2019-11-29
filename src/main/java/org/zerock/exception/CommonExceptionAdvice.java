@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +19,9 @@ public class CommonExceptionAdvice {
 	public String except(Exception ex, Model model) {
 		log.error("Exception: " + ex.getMessage());
 		model.addAttribute("exception", ex);
+		if (ex instanceof AccessDeniedException || ex instanceof AuthenticationException) {
+            return "/errors/access_denied";
+        }
 		return "/errors/error_page";
 	}
 	

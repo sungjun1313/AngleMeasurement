@@ -1,8 +1,10 @@
 package org.zerock.mapper;
 
+import java.util.List;
+
 import org.zerock.domain.AngleVO;
 
 public interface AngleMapper {
 
-	public AngleVO getTime();
+	public List<AngleVO> getList();
 }

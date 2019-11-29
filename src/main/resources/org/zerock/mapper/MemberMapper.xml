@@ -16,7 +16,7 @@
 	</resultMap>
 	
 	<resultMap type="org.zerock.domain.AuthVO" id="authMap">
-		<result property="userid" column="userid" />
+		<result property="userId" column="userid" />
 		<result property="auth" column="auth" />
 	</resultMap>
 	
@@ -27,5 +27,10 @@
 			tbl_member mem LEFT OUTER JOIN tbl_member_auth auth on mem.userid = auth.userid
 		WHERE mem.userid = #{userid}
 	</select>
+	
+	<insert id="register">
+		insert into tbl_member (userid, userpw, username, email)
+		values (#{userId}, #{userPw}, #{userName}, #{email})
+	</insert>
 
 </mapper>

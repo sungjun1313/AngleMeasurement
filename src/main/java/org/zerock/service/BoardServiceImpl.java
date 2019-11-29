@@ -5,21 +5,22 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.zerock.domain.AngleVO;
-import org.zerock.mapper.AngleMapper;
+import org.zerock.domain.BoardVO;
+import org.zerock.mapper.BoardMapper;
 
+//import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class AngleServiceImpl implements AngleService {
+public class BoardServiceImpl implements BoardService {
 
 	@Setter(onMethod_ = { @Autowired })
-	private AngleMapper mapper;
+	private BoardMapper mapper;
 	
 	@Override
-	public List<AngleVO> getList(){
+	public List<BoardVO> getList(){
 		return mapper.getList();
 	}
 }
