@@ -4,6 +4,13 @@
 <layout:extends name="base">
 	<layout:put block="title">에러페이지</layout:put>
 	<layout:put block="content">
-		error_page.jsp
+		<div class="container">
+			<div class="alert alert-danger text-center font-weight-bold my-4">
+				Error Page
+			</div>
+			<div>
+				<c:out value="${ exception }"></c:out>
+			</div>
+		</div>
 	</layout:put>
 </layout:extends>

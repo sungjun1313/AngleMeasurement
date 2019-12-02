@@ -18,10 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
+	//prevPage 없을 때 리다이렉트할 default url
 	public CustomLoginSuccessHandler() {
-        setDefaultTargetUrl("/");
+        setDefaultTargetUrl("/angle/list");
     }
 	
+	//prevPage를 체크해서 prevPage가 존재하면 prevPage로 리다이렉트, 없으면 default url로 리다이렉트
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws IOException, ServletException {
 		log.warn("Login success");

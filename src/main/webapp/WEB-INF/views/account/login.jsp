@@ -4,8 +4,12 @@
 <layout:extends name="base">
 	<layout:put block="title">로그인페이지</layout:put>
 	<layout:put block="content">
-		<div class="row justify-content-center">
-			<div class="col-12 col-md-6">
+		<div class="container">
+			<h3 class="text-center my-5 text-info font-weight-bold">
+				로그인
+			</h3>
+		
+			<div class="mx-auto col-12 col-lg-8">
 				<c:if test="${ error != null }">
 					<div class="alert alert-danger mt-3">
 						<c:out value="${ error }" />

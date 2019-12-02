@@ -19,6 +19,7 @@ public class BoardServiceImpl implements BoardService {
 	@Setter(onMethod_ = { @Autowired })
 	private BoardMapper mapper;
 	
+	//게시판 객체를 모두 가져온다.
 	@Override
 	public List<BoardVO> getList(){
 		return mapper.getList();

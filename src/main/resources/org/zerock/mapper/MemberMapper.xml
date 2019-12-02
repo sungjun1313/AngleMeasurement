@@ -25,12 +25,24 @@
 			mem.userid, userpw, username, email, enabled, regdate, updatedate, lastlogin, auth
 		FROM
 			tbl_member mem LEFT OUTER JOIN tbl_member_auth auth on mem.userid = auth.userid
-		WHERE mem.userid = #{userid}
+		WHERE mem.userid = #{userId}
 	</select>
 	
 	<insert id="register">
 		insert into tbl_member (userid, userpw, username, email)
 		values (#{userId}, #{userPw}, #{userName}, #{email})
 	</insert>
+	
+	<select id="isExistUserId" resultType="int">
+		<![CDATA[
+			select count(*) from tbl_member where userid = #{userId}
+		]]>
+	</select>
+	
+	<select id="isExistEmail" resultType="int">
+		<![CDATA[
+			select count(*) from tbl_member where email = #{email}
+		]]>
+	</select>
 
 </mapper>

@@ -34,21 +34,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Setter(onMethod_ = { @Autowired })
 	private DataSource dataSource;
 	
+	//로그인 성공 시 리다이렉트를 정하는 핸들러 클래스 리턴
 	@Bean
 	public AuthenticationSuccessHandler loginSuccessHandler() {
 		return new CustomLoginSuccessHandler();
 	}
 	
+	//패스워드 암호화 클래스 리턴
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	
+	//유저정보 가져오는 서비스 리턴
 	@Bean
 	public UserDetailsService customUserService() {
 		return new CustomUserDetailsService();
 	}
 	
+	//rememberMe에서 사용되는 저장소 리턴
 	@Bean
 	public PersistentTokenRepository persistentTokenRepository() {
 		JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
@@ -56,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return repo;
 	}
 	
+	//권한 거부되었을 때 리다이렉트를 정하는 클래스 리턴
 	@Bean
 	public AccessDeniedHandler customAccessDeniedHandler() {
 		return new CustomAccessDeniedHandler();
@@ -68,6 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	*/
 
+	//세팅 시작
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		//xml에서 url-intercept 역할
@@ -81,21 +87,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.loginProcessingUrl("/login")
 			.successHandler(loginSuccessHandler());
 		
+		//로그인 성공 시 다음에 자동 로그인
 		http.rememberMe()
 			.key("zerock")
 			.tokenRepository(persistentTokenRepository())
 			.tokenValiditySeconds(604800);
 		
+		//로그아웃 세션 쿠기 삭제
 		http.logout()
 			.logoutUrl("/customLogout")
 			.invalidateHttpSession(true)
 			.deleteCookies("remember-me", "JESSSION_ID");
 		
+		//권한 거부 되었을 때 액션
 		http.exceptionHandling()
 			.accessDeniedHandler(this.customAccessDeniedHandler());
 		
 	}
 	
+	//유저정보를 가져올 서비스와 패스워드 암호화 설정
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(customUserService())

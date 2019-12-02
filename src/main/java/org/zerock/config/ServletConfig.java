@@ -17,6 +17,7 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableGlobalMethodSecurity(prePostEnabled=true, securedEnabled=true)
 public class ServletConfig implements WebMvcConfigurer {
 
+	//jsp file 경로 설정
 	@Override
 	public void configureViewResolvers(ViewResolverRegistry registry) {
 		InternalResourceViewResolver bean = new InternalResourceViewResolver();
@@ -26,11 +27,13 @@ public class ServletConfig implements WebMvcConfigurer {
 		registry.viewResolver(bean);
 	}
 	
+	//css js등 리소스 파일 경로 설정
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
 	
+	//multipart 요청이 왔을 때 파일 업로드 설정
 	@Bean
 	public MultipartResolver multipartResolver() {
 		StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();

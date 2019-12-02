@@ -11,6 +11,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 
 public class CustomHttp403ForbiddenEntryPoint implements AuthenticationEntryPoint {
 
+	//403 entryPoint 진입 시 처리
 	@Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException) throws IOException, ServletException {

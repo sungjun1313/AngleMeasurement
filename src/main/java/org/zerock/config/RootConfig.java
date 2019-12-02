@@ -30,6 +30,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @MapperScan(basePackages = {"org.zerock.mapper"})
 public class RootConfig {
 
+	//DB 연결 설정
 	@Bean
 	public DataSource dataSource() {
 		HikariConfig hikariConfig = new HikariConfig();
@@ -42,6 +43,7 @@ public class RootConfig {
 		return dataSource;
 	}
 	
+	//SqlSessionFactory 설정
 	@Bean
 	public SqlSessionFactory sqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
@@ -49,6 +51,7 @@ public class RootConfig {
 		return (SqlSessionFactory) sqlSessionFactory.getObject();
 	}
 	
+	//트랙잭션 설정
 	@Bean
 	public DataSourceTransactionManager txManager() {
 		return new DataSourceTransactionManager(dataSource());

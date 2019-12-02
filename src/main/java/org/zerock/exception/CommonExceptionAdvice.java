@@ -15,6 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CommonExceptionAdvice {
 
+	//모든 Exception을 처리
+	//권한 관련 에러일 경우 -> /errors/access_denied.jsp
+	//나머지 에러일 경우 -> /errors/error_page.jsp
 	@ExceptionHandler(Exception.class)
 	public String except(Exception ex, Model model) {
 		log.error("Exception: " + ex.getMessage());
@@ -25,6 +28,7 @@ public class CommonExceptionAdvice {
 		return "/errors/error_page";
 	}
 	
+	//404 에러 처리
 	@ExceptionHandler(NoHandlerFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public String handle404(NoHandlerFoundException ex) {

@@ -18,6 +18,7 @@ public class AngleServiceImpl implements AngleService {
 	@Setter(onMethod_ = { @Autowired })
 	private AngleMapper mapper;
 	
+	//각도 측정 객체를 모두 가져온다.
 	@Override
 	public List<AngleVO> getList(){
 		return mapper.getList();
