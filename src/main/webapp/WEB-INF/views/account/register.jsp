@@ -17,7 +17,7 @@
 					</label>
 					<input type="text" name="userId" id="id_userId" class="form-control" required value="<c:out value='${ prevValue.userId }'/>" />
 					<c:forEach var="error" items="${ validation.userIdResult }">
-						<p class="text-danger"><c:out value="${ error }" /></p>
+						<p class="text-danger warning"><c:out value="${ error }" /></p>
 					</c:forEach>
 				</div>
 				<div class="form-group">
@@ -26,7 +26,7 @@
 					</label>
 					<input type="password" name="userPw" id="id_userPw" class="form-control" required />
 					<c:forEach var="error" items="${ validation.userPwResult }">
-						<p class="text-danger"><c:out value="${ error }" /></p>
+						<p class="text-danger warning"><c:out value="${ error }" /></p>
 					</c:forEach>
 				</div>
 				<div class="form-group">
@@ -41,7 +41,7 @@
 					</label>
 					<input type="text" name="userName" id="id_userName" class="form-control" required value="<c:out value='${ prevValue.userName }'/>" />
 					<c:forEach var="error" items="${ validation.userNameResult }">
-						<p class="text-danger"><c:out value="${ error }" /></p>
+						<p class="text-danger warning"><c:out value="${ error }" /></p>
 					</c:forEach>
 				</div>
 				<div class="form-group">
@@ -50,7 +50,7 @@
 					</label>
 					<input type="email" name="email" id="id_email" class="form-control" value="<c:out value='${ prevValue.email }'/>" />
 					<c:forEach var="error" items="${ validation.emailResult }">
-						<p class="text-danger"><c:out value="${ error }" /></p>
+						<p class="text-danger warning"><c:out value="${ error }" /></p>
 					</c:forEach>
 				</div>
 				<div class="form-group text-center">
@@ -60,32 +60,13 @@
 		</div>
 	</layout:put>
 	<layout:put block="js">
+		<script src="/resources/js/utils.js"></script>
 		<script>
 			$(document).ready(function(){
-				//빈값인 지 확인
-				function isEmptyCheck(val, type){
-					if(!val || val == null){
-						alert(type + "을(를) 적어주세요.");
-						return false;
-					}
-					return true;
-				}
 				
-				//공백 여부 체크
-				function isSpaceCheck(val1, val2, type){
-					if(val1 != val2){
-						alert(type + "의 공백을 제거해주세요.");
-						return false;
-					}
-					return true;
-				}
 				
-				//이메일 체크
-				function validateEmail(email) {
-				  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-				  return re.test(email);
-				}
 				
+				//회원등록 전송
 				$("#registerForm").submit(function(e){
 					
 					var userIdVal = $("#id_userId").val();
@@ -94,36 +75,39 @@
 					var userNameVal = $("#id_userName").val();
 					var emailVal = $("#id_email").val();
 					
-					if(!isSpaceCheck(userIdVal, userIdVal.trim(), "아이디")){
+					if(!utils.isSpaceCheck(userIdVal, userIdVal.trim(), "아이디")){
 						return false;
 					}
 					
-					if(!isSpaceCheck(userPwVal, userPwVal.trim(), "비밀번호")){
+					if(!utils.isSpaceCheck(userPwVal, userPwVal.trim(), "비밀번호")){
 						return false;
 					}
 					
-					if(!isSpaceCheck(userPw2Val, userPw2Val.trim(), "비밀번호 확인")){
+					if(!utils.isSpaceCheck(userPw2Val, userPw2Val.trim(), "비밀번호 확인")){
 						return false;
 					}
 					
-					if(!isSpaceCheck(userNameVal, userNameVal.trim(), "이름")){
+					if(!utils.isSpaceCheck(userNameVal, userNameVal.trim(), "이름")){
 						return false;
 					}
 					
-					if(!isSpaceCheck(emailVal, emailVal.trim(), "이메일")){
+					if(!utils.isSpaceCheck(emailVal, emailVal.trim(), "이메일")){
 						return false;
 					}
 					
-					if(!isEmptyCheck(userIdVal.trim(), "아이디")){
+					if(!utils.isEmptyCheck(userIdVal.trim(), "아이디")){
 						return false;
 					}
-					if(!isEmptyCheck(userPwVal.trim(), "비밀번호")){
+					
+					if(!utils.isEmptyCheck(userPwVal.trim(), "비밀번호")){
 						return false;
 					}
-					if(!isEmptyCheck(userPw2Val.trim(), "비밀번호 확인")){
+					
+					if(!utils.isEmptyCheck(userPw2Val.trim(), "비밀번호 확인")){
 						return false;
 					}
-					if(!isEmptyCheck(userNameVal.trim(), "이름")){
+					
+					if(!utils.isEmptyCheck(userNameVal.trim(), "이름")){
 						return false;
 					}
 					
@@ -132,12 +116,14 @@
 						return false;
 					}
 					
-					if(!validateEmail(emailVal)){
-						alert("올바른 이메일을 적어주세요.");
+					if(emailVal.trim() && !utils.validateEmail(emailVal)){
 						return false;
 					}
 					
 				});
+				 
+				utils.reSubmitPrevent();
+
 			});
 		</script>
 	</layout:put>

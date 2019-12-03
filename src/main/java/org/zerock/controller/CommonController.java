@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.domain.MemberVO;
+import org.zerock.security.domain.CustomUser;
 import org.zerock.service.MemberService;
 
 import lombok.Setter;
@@ -109,14 +110,13 @@ public class CommonController {
 	
 	//  /register 회원가입 post 요청 처리
 	@PostMapping("/register")
-	public String postRegister(MemberVO memberVO, @RequestParam("userPw2") String userPw2, RedirectAttributes rttr) {
+	public String postRegister(MemberVO memberVO, @RequestParam("userPw2") String userPw2, Model model, RedirectAttributes rttr) {
 		log.info("memverVO: " + memberVO);
 		log.info("userPw2: " + userPw2);
-		String prevPassword = memberVO.getUserPw();
-		String encPassword = passwordEncoder.encode(prevPassword);//비밀번호 암호화
-		memberVO.setUserPw(encPassword);
-		HashMap<String, List<String>> map = memberService.registerValidation(memberVO, prevPassword, userPw2);
-		if(map.get("userIdResult").isEmpty() && map.get("userPwResult").isEmpty() && map.get("userNameResult").isEmpty() && map.get("emailResult").isEmpty()) {
+		
+		if(memberService.registerValidation(memberVO, model, userPw2)) {
+			String encPassword = passwordEncoder.encode(memberVO.getUserPw());//비밀번호 암호화
+			memberVO.setUserPw(encPassword);
 			int result = memberService.register(memberVO);
 			if(result == 1) {
 				log.info("회원가입 성공");
@@ -124,25 +124,81 @@ public class CommonController {
 				return "redirect:/customLogin";
 			}
 			log.info("회원가입 서버 에러");
-			rttr.addFlashAttribute("message", "서버 에러로 회원가입에 실패하였습니다.");
-			return "redirect:/register";
+			model.addAttribute("message", "서버 에러로 회원가입에 실패하였습니다.");
 		}
-		log.info("회원가입 validation 실패");
-		log.info(map.toString());
-		HashMap<String, String> prevValue = new HashMap<String, String>();
-		prevValue.put("userId", memberVO.getUserId());
-		prevValue.put("userName", memberVO.getUserName());
-		prevValue.put("email", memberVO.getEmail());
-		rttr.addFlashAttribute("validation", map);
-		rttr.addFlashAttribute("prevValue", prevValue);
-		return "redirect:/register";
+		return "account/register";
 	}
 	
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/customProfile")
 	public String getProfile() {
 		log.info("custom profile");
+		//CustomUser userDetails = (CustomUser)auth.getPrincipal();
+		//MemberVO memberVO = userDetails.getMember();
 		return "account/profile";
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/changeProfile")
+	public String getChangeProfile() {
+		log.info("profile change");
+		return "account/changeProfile";
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@PostMapping("/changeProfile")
+	public String postChangeProfile(MemberVO memberVO, Authentication auth, Model model, RedirectAttributes rttr) {
+		
+		if(memberService.changeProfileValidation(memberVO, auth, model)) {
+			CustomUser user = (CustomUser)auth.getPrincipal();
+			MemberVO member = user.getMember();
+			memberVO.setUserId(member.getUserId());
+			int result = memberService.changeProfile(memberVO);
+			if(result == 1) {
+				log.info("회원정보 변경 성공");
+				//DB 변경 성공 시 현재 member객체도 수정
+				member.setUserName(memberVO.getUserName());
+				member.setEmail(memberVO.getEmail());
+				rttr.addFlashAttribute("message", "회원정보 변경이 성공적으로 완료되었습니다.");
+				return "redirect:/customProfile";
+			}
+			log.info("회원 정보 변경 서버에러");
+			model.addAttribute("message", "서버 에러로 회원 정보 변경에 실패하였습니다.");
+		}
+		return "account/changeProfile";
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/changePassword")
+	public String getChangePassword() {
+		log.info("password change");
+		return "account/changePassword";
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@PostMapping("/changePassword")
+	public String postChangePassword(@RequestParam("newPassword1") String newPassword1, @RequestParam("newPassword2") String newPassword2, 
+			@RequestParam("oldPassword") String oldPassword, Model model, Authentication auth, RedirectAttributes rttr) {
+		if(memberService.changePasswordValidation(auth, model, newPassword1, newPassword2, oldPassword, passwordEncoder)) {
+			CustomUser user = (CustomUser)auth.getPrincipal();
+			MemberVO member = user.getMember();
+			MemberVO memberVO = new MemberVO();
+			memberVO.setUserId(member.getUserId());
+			String encPassword = passwordEncoder.encode(newPassword1);//비밀번호 암호화
+			memberVO.setUserPw(encPassword);
+			
+			int result = memberService.changePassword(memberVO);
+			if(result == 1) {
+				log.info("비밀번호 변경 성공");
+				//DB 변경 성공 시 member 객체도 변경
+				member.setUserPw(encPassword);
+				rttr.addFlashAttribute("message", "비밀번호 변경이 성공적으로 완료되었습니다.");
+				return "redirect:/customProfile";
+			}
+			log.info("비밀번호 변경 서버에러");
+			model.addAttribute("message", "서버 에러로 비밀번호 변경에 실패하였습니다.");
+		}
+		return "account/changePassword";
 	}
 	
 }

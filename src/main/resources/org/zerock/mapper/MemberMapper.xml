@@ -44,5 +44,17 @@
 			select count(*) from tbl_member where email = #{email}
 		]]>
 	</select>
+	
+	<update id="changeProfile">
+		update tbl_member
+		set username=#{userName}, email=#{email}, updatedate=sysdate
+		where userid = #{userId}
+	</update>
+	
+	<update id="changePassword">
+		update tbl_member
+		set userpw=#{userPw}, updatedate=sysdate
+		where userid = #{userId}
+	</update>
 
 </mapper>

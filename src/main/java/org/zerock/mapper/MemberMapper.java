@@ -15,4 +15,10 @@ public interface MemberMapper {
 	
 	//이메일이 존재하는 지 확인한다.
 	public int isExistEmail(String email);
+	
+	//유저정보를 변경한다.
+	public int changeProfile(MemberVO memberVO);
+	
+	//비밀번호를 변경한다.
+	public int changePassword(MemberVO memberVO);
 }

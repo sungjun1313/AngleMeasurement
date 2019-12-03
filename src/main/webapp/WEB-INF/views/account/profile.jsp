@@ -9,7 +9,7 @@
 	<layout:put block="content">
 		<div class="container">
 			<div class="mx-auto my-5 col-12 col-lg-8 border border-success rounded p-4">
-				<h3 class="text-center">프로필</h3>
+				<h3 class="text-center text-info">프로필</h3>
 				<div class="row pt-2">
 					<div class="col-4 text-info text-right font-weight-bold border-right">아이디</div>
 					<div class="col-8 pl-2">
@@ -45,6 +45,10 @@
 					<div class="col-8 pl-2">
 						<fmt:formatDate value="${ pinfo.member.lastLogin }" pattern="yyyy-MM-dd" />
 					</div>
+				</div>
+				<div class="pt-4 mt-4 text-center border-top">
+					<a href="/changeProfile" class="btn btn-primary mr-2">프로필 변경</a>
+					<a href="/changePassword" class="btn btn-info">비밀번호 변경</a>
 				</div>
 			</div>
 		</div>
