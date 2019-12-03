@@ -31,19 +31,19 @@
 				<div class="row pt-2">
 					<div class="col-4 text-info text-right font-weight-bold border-right">등록일</div>
 					<div class="col-8 pl-2">
-						<fmt:formatDate value="${ pinfo.member.regDate }" pattern="yyyy-MM-dd" />
+						<fmt:formatDate value="${ pinfo.member.regDate }" pattern="yyyy-MM-dd HH:mm:ss" />
 					</div>
 				</div>
 				<div class="row pt-2">
 					<div class="col-4 text-info text-right font-weight-bold border-right">수정일</div>
 					<div class="col-8 pl-2">
-						<fmt:formatDate value="${ pinfo.member.updateDate }" pattern="yyyy-MM-dd" />
+						<fmt:formatDate value="${ pinfo.member.updateDate }" pattern="yyyy-MM-dd HH:mm:ss" />
 					</div>
 				</div>
 				<div class="row pt-2">
 					<div class="col-4 text-info text-right font-weight-bold border-right">마지막 접속일</div>
 					<div class="col-8 pl-2">
-						<fmt:formatDate value="${ pinfo.member.lastLogin }" pattern="yyyy-MM-dd" />
+						<fmt:formatDate value="${ pinfo.member.lastLogin }" pattern="yyyy-MM-dd HH:mm:ss" />
 					</div>
 				</div>
 				<div class="pt-4 mt-4 text-center border-top">

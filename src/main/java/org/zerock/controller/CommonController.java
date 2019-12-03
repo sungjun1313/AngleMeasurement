@@ -129,6 +129,7 @@ public class CommonController {
 		return "account/register";
 	}
 	
+	//  /customProfile 프로필 상세 페이지
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/customProfile")
 	public String getProfile() {
@@ -138,6 +139,7 @@ public class CommonController {
 		return "account/profile";
 	}
 	
+	//  /changeProfile 프로필 변경 페이지
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/changeProfile")
 	public String getChangeProfile() {
@@ -145,6 +147,7 @@ public class CommonController {
 		return "account/changeProfile";
 	}
 	
+	//  /changeProfile 프로필 변경 post 요청 처리
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/changeProfile")
 	public String postChangeProfile(MemberVO memberVO, Authentication auth, Model model, RedirectAttributes rttr) {
@@ -159,6 +162,7 @@ public class CommonController {
 				//DB 변경 성공 시 현재 member객체도 수정
 				member.setUserName(memberVO.getUserName());
 				member.setEmail(memberVO.getEmail());
+				member.setUpdateDate(memberVO.getUpdateDate());
 				rttr.addFlashAttribute("message", "회원정보 변경이 성공적으로 완료되었습니다.");
 				return "redirect:/customProfile";
 			}
@@ -168,6 +172,7 @@ public class CommonController {
 		return "account/changeProfile";
 	}
 	
+	//  /changePassword  비밀번호 변경 페이지
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/changePassword")
 	public String getChangePassword() {
@@ -175,6 +180,7 @@ public class CommonController {
 		return "account/changePassword";
 	}
 	
+	//  /changePassword 비밀번호 변경 post 요청 처리
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/changePassword")
 	public String postChangePassword(@RequestParam("newPassword1") String newPassword1, @RequestParam("newPassword2") String newPassword2, 
@@ -192,6 +198,7 @@ public class CommonController {
 				log.info("비밀번호 변경 성공");
 				//DB 변경 성공 시 member 객체도 변경
 				member.setUserPw(encPassword);
+				member.setUpdateDate(memberVO.getUpdateDate());
 				rttr.addFlashAttribute("message", "비밀번호 변경이 성공적으로 완료되었습니다.");
 				return "redirect:/customProfile";
 			}

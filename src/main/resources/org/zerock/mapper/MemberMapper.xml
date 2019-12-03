@@ -46,14 +46,20 @@
 	</select>
 	
 	<update id="changeProfile">
+		<selectKey keyProperty="updateDate" order="BEFORE" resultType="Date">
+			select sysdate from dual
+		</selectKey>
 		update tbl_member
-		set username=#{userName}, email=#{email}, updatedate=sysdate
+		set username=#{userName}, email=#{email}, updatedate=#{updateDate}
 		where userid = #{userId}
 	</update>
 	
 	<update id="changePassword">
+		<selectKey keyProperty="updateDate" order="BEFORE" resultType="Date">
+			select sysdate from dual
+		</selectKey>
 		update tbl_member
-		set userpw=#{userPw}, updatedate=sysdate
+		set userpw=#{userPw}, updatedate=#{updateDate}
 		where userid = #{userId}
 	</update>
 
