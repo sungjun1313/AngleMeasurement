@@ -79,6 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//xml에서 url-intercept 역할
 		http.authorizeRequests()
 			.antMatchers("/").permitAll()
+			.antMatchers("/angle/create").access("isAuthenticated()")
 			.antMatchers("/test").access("isAuthenticated()");
 		
 		//loginPage는 login url, loginProcessingUrl는  login 처리할  url

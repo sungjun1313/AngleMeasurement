@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.zerock.mapper.AngleMapper">
+
 	<select id="getList" resultType="org.zerock.domain.AngleVO">
 		select uuid, bno, angle, uploadpath, filename
 		from tbl_angle
 	</select>
+	
+	<select id="getListWithPaging" resultType="org.zerock.domain.AngleVO">
+		<![CDATA[
+		select uuid, bno, angle, uploadpath, filename
+		from
+		(
+			select /*+INDEX(tbl_angle idx_angle)*/
+				rownum rn, uuid, bno, angle, uploadpath, filename
+			from tbl_angle
+			where bno = #{bno}
+			and rownum <= #{cri.pageNum} * #{cri.amount}
+		)
+		where rn > (#{cri.pageNum}-1) * #{cri.amount}
+		]]>
+	</select>
+	
 </mapper>
