@@ -14,4 +14,8 @@ public interface BoardService {
 	public int getTotalCount(Criteria cri);
 	
 	public BoardVO read(Long bno);
+	
+	public void register(BoardVO boardVO);
+	
+	public int modify(BoardVO boardVO);
 }

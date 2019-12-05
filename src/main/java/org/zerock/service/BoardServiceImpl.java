@@ -44,4 +44,16 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.read(bno);
 	}
 	
+	//게시판 객체를 추가한다.
+	@Override
+	public void register(BoardVO boardVO) {
+		boardMapper.insert(boardVO);
+	}
+	
+	//게시판 객체를 수정한다.
+	@Override
+	public int modify(BoardVO boardVO) {
+		return boardMapper.update(boardVO);
+	}
+	
 }

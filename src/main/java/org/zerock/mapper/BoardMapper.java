@@ -18,4 +18,10 @@ public interface BoardMapper {
 	
 	//게시판 객체 디테일 정보
 	public BoardVO read(Long bno);
+	
+	//게시판 추가
+	public void insert(BoardVO boardVO);
+	
+	//게시판 수정
+	public int update(BoardVO boardVO);
 }

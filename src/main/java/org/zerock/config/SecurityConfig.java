@@ -18,6 +18,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.zerock.security.CustomUserDetailsService;
 import org.zerock.security.CustomLoginSuccessHandler;
 import org.zerock.security.CustomAccessDeniedHandler;
@@ -76,6 +78,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	//세팅 시작
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
+		//여기서 UTF-8 세팅해준다.
+		CharacterEncodingFilter filter = new CharacterEncodingFilter();
+        filter.setEncoding("UTF-8");
+        filter.setForceEncoding(true);
+        http.addFilterBefore(filter,CsrfFilter.class);
+        
 		//xml에서 url-intercept 역할
 		http.authorizeRequests()
 			.antMatchers("/").permitAll()

@@ -29,6 +29,17 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 		return new String[] {"/"};
 	}
 	
+	@Override
+	protected Filter[] getServletFilters() {
+		//spring security 하고 충돌해서 작동하지 않는다.
+		//SecurityConfig에서 configure 메서드 안에 필터를 넣어줘야 한다.
+		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+		characterEncodingFilter.setEncoding("UTF-8");
+		characterEncodingFilter.setForceEncoding(true);
+
+		return new Filter[] { characterEncodingFilter };
+	}
+	
 	
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
@@ -51,13 +62,5 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 		registration.setMultipartConfig(multipartConfig);
 	}
 	
-	@Override
-	protected Filter[] getServletFilters() {
-		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-		characterEncodingFilter.setEncoding("UTF-8");
-		characterEncodingFilter.setForceEncoding(true);
-		
-		return new Filter[] {characterEncodingFilter};
-	}
 	
 }
