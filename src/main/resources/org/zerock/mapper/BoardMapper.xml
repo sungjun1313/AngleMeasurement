@@ -84,4 +84,10 @@
 		where bno = #{bno}
 	</update>
 	
+	<select id="isExistBoard" resultType="int">
+		select count(*)
+		from tbl_board
+		where bno = #{bno}
+	</select>
+	
 </mapper>

@@ -1,0 +1,68 @@
+#angleBox {
+	position: relative;
+	width: 100%;
+	height: 400px;
+	overflow: hidden;
+	touch-action: none;
+}
+			
+#result, #canvas {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+}
+
+#result {
+	z-index: 1;
+}
+
+#result>div {
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
+
+#result>div>img {
+	width: auto;
+	height: 100%;
+}
+
+#canvas {
+	z-index: 2;
+}
+
+.cir {
+	position: absolute;
+	width: 50px;
+	height: 50px;
+	background-color: rgb(245, 230, 99);
+	border-radius: 50%;
+	touch-action: none;
+	user-select: none;
+	z-index: 3;
+}
+
+.cir:active {
+	background-color: rgba(168, 218, 220, 1);
+}
+
+.cir:hover {
+	cursor: pointer;
+}
+
+.cir1 {
+	top: 25%;
+	left: 25%;
+}
+
+.cir2 {
+	top: 75%;
+	left: 25%;
+}
+
+.cir3 {
+	top: 75%;
+	left: 75%;
+}

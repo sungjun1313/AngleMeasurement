@@ -24,14 +24,28 @@
 					</div>
 				</div>
 				
+				<div class="card my-3">
+					<div class="card-header text-center">
+						각도 측정
+					</div>
+					<div class="card-body">
+						<c:forEach items="${angleList }" var="angle">
+							<p>
+								<c:out value="${ angle.angle }" />
+							</p>
+						</c:forEach>
+					</div>
+				</div>
+				
 				<div class="my-4 text-center">
 					<sec:authorize access="isAuthenticated()">
 						<c:if test="${ pinfo.member.userId eq board.writer }">
-							<a href="/angle/modify/<c:out value='${ board.bno }' />" id="modifyBtn" class="btn btn-info mr-2">Modify</a>
-							<button id="deleteBtn" class="btn btn-danger mr-2">Remove</button>
+							<a href="/angle/modify/<c:out value='${ board.bno }' />" id="modifyBtn" class="btn btn-primary mr-2 mt-2">Modify</a>
+							<a href="/angle/measure/create/<c:out value='${ board.bno }' />" id="measureCreateBtn" class="btn btn-success mr-2 mt-2">Angle Create</a>
+							<button id="deleteBtn" class="btn btn-danger mr-2 mt-2">Remove</button>
 						</c:if>
 					</sec:authorize>
-					<a href="#" id="listBtn" class="btn btn-info">목록</a>
+					<a href="#" id="listBtn" class="btn btn-info mt-2">목록</a>
 				</div>
 			
 				<form id="deleteForm" action="/angle/delete" method="post">
@@ -57,7 +71,7 @@
 					listForm.submit();
 				});
 				
-				$("#modifyBtn").on("click", function(e){
+				$("#modifyBtn, #measureCreateBtn").on("click", function(e){
 					e.preventDefault();
 					listForm.attr("action", $(this).attr("href"));
 					listForm.submit();

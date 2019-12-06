@@ -15,4 +15,6 @@ public interface AngleMapper {
 	//인자가 두 개 이상일 때 Param으로 정의해서 mapper.xml에 넘겨준다.
 	public List<AngleVO> getListWithPaging(@Param("cri") Criteria cri, @Param("bno") Long bno);
 	
+	//각도 측정 객체를 추가한다.
+	public int insert(AngleVO angleVO);
 }

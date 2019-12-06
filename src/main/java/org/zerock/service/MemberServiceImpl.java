@@ -79,6 +79,11 @@ public class MemberServiceImpl implements MemberService {
 			log.warn("아이디 null");
 			userIdResult.add("아이디는 필수항목입니다.");
 		}else {
+			if(userId.length() > 50) {
+				log.warn("아이디 길이");
+				userIdResult.add("아이디는 50 글자 아래로 입력해주세요.");
+			}
+			
 			if(memberMapper.isExistUserId(userId) > 0) {
 				log.warn("아이디 중복");
 				userIdResult.add("이미 존재하는 아이디입니다.");
@@ -89,6 +94,11 @@ public class MemberServiceImpl implements MemberService {
 			log.warn("비밀번호 null");
 			userPwResult.add("비밀번호는 필수항목입니다.");
 		}else {
+			if(userPw.length() > 100 || password2.length() > 100) {
+				log.warn("비밀번호 길이");
+				userPwResult.add("비밀번호는 100 글자 아래로 입력해주세요.");
+			}
+			
 			if(!userPw.equals(password2)) {
 				log.warn("비밀번호 안 맞음");
 				userPwResult.add("비밀번호가 서로 일치하지 않습니다.");
@@ -98,9 +108,19 @@ public class MemberServiceImpl implements MemberService {
 		if(userName == null || userName.length() == 0) {
 			log.warn("이름 null");
 			userNameResult.add("이름은 필수항목입니다.");
+		}else {
+			if(userName.length() > 100) {
+				log.warn("이름 길이");
+				userNameResult.add("이름은 100 글자 아래로 입력해주세요.");
+			}
 		}
 		
 		if(email != null && email.length() != 0) {
+			if(email.length() > 100) {
+				log.warn("이메일 길이");
+				emailResult.add("이메일은 100 글자 아래로 입력해주세요.");
+			}
+			
 			if(memberMapper.isExistEmail(email) > 0) {
 				log.warn("이메일 중복");
 				emailResult.add("이미 존재하는 이메일입니다.");
@@ -152,9 +172,19 @@ public class MemberServiceImpl implements MemberService {
 		if(userName == null || userName.length() == 0) {
 			log.warn("이름 null");
 			userNameResult.add("이름은 필수항목입니다.");
+		}else {
+			if(userName.length() > 100) {
+				log.warn("이름 길이");
+				userNameResult.add("이름은 100 글자 아래로 입력해주세요.");
+			}
 		}
 		
 		if(email != null && email.length() != 0 && !email.equals(member.getEmail())) {
+			if(email.length() > 100) {
+				log.warn("이메일 길이");
+				emailResult.add("이메일은 100 글자 아래로 입력해주세요.");
+			}
+			
 			if(memberMapper.isExistEmail(email) > 0) {
 				log.warn("이메일 중복");
 				emailResult.add("이미 존재하는 이메일입니다.");
@@ -207,6 +237,16 @@ public class MemberServiceImpl implements MemberService {
 		if(newPassword1 == null || newPassword1.length() == 0 || newPassword2 == null || newPassword2.length() == 0) {
 			log.warn("newPassword null");
 			newUserPwResult.add("새 비밀번호와 새 비밀번호 확인 모두 기입해주세요.");
+		}
+		
+		if(oldPassword.length() > 100) {
+			log.warn("비밀번호 길이");
+			oldUserPwResult.add("비밀번호는 100 글자 아래로 입력해주세요.");
+		}
+		
+		if(newPassword1.length() > 100 || newPassword2.length() > 100) {
+			log.warn("비밀번호 길이");
+			newUserPwResult.add("비밀번호는 100 글자 아래로 입력해주세요.");
 		}
 		
 		if(!passwordEncoder.matches(oldPassword, member.getUserPw())) {

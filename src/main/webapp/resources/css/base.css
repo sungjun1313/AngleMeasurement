@@ -1,5 +1,5 @@
 html {
-	position: relatvie;
+	position: relatvie;/*invalid value가 떠서 html tag에 직접 스타일 적용*/
 	min-height: 100%;
 }
 

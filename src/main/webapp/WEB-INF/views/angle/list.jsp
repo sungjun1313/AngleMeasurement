@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://kwonnam.pe.kr/jsp/template-inheritance" prefix="layout" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -12,7 +13,7 @@
 				<div class="col-xl-10">
 					<h3 class="my-4 text-center text-info">각도 측정 게시판</h3>
 				
-					<table class="table table-sm table-hover text-center">
+					<table class="table table-sm table-hover text-center" style="table-layout:fixed;">
 						<thead>
 							<tr class="table-primary">
 								<th style="width:70px;">No.</th>
@@ -25,7 +26,10 @@
 							<c:forEach items="${ list }" var="board">
 								<tr class="customPointer" data-href="<c:out value='${ board.bno }'/>">
 									<td><c:out value="${ board.bno }"/></td>
-									<td><c:out value="${ board.title }"/></td>
+									<td class="text-truncate">
+										<c:set var="title" value="${ board.title }"/>
+										${fn:length(title) > 40 ? fn:substring(title, 0, 40) : title}${fn:length(title) > 40 ? "..." : "" }
+									</td>
 									<td><c:out value="${ board.writer }"/></td>
 									<td class="d-none d-md-table-cell"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value='${ board.regDate }' /></td>
 								</tr>

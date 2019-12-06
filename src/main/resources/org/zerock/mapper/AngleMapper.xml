@@ -22,4 +22,9 @@
 		]]>
 	</select>
 	
+	<insert id="insert">
+		insert into tbl_angle (uuid, bno, angle, uploadpath, filename)
+		values (#{uuid}, #{bno}, #{angle}, #{uploadPath}, #{fileName})
+	</insert>
+	
 </mapper>

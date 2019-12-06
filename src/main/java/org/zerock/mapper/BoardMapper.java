@@ -20,8 +20,11 @@ public interface BoardMapper {
 	public BoardVO read(Long bno);
 	
 	//게시판 추가
-	public void insert(BoardVO boardVO);
+	public int insert(BoardVO boardVO);
 	
 	//게시판 수정
 	public int update(BoardVO boardVO);
+	
+	//게시판이 존재하는 지 확인
+	public int isExistBoard(Long bno);
 }
