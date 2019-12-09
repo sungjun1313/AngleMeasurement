@@ -14,7 +14,15 @@
 			<h3 class="my-4 text-center text-info">각도 측정</h3>
 			
 			<div id="angleBox" class="border">
-				<div id="result"></div>
+				<div id="result">
+					<div>
+						<img class="img customPointer" src="/resources/images/no_image.png"
+							data-uploadpath="<c:out value='${ angle.uploadPath }' />" data-uuid="<c:out value='${ angle.uuid }' />"
+							data-filename="<c:out value='${ angle.fileName }' />"
+							alt="각도 측정 이미지"
+						/>
+					</div>
+				</div>
 				<svg id="canvas">
 					<polyline class="poly poly1" style="file:none;stroke:black;stoke-width:3"></polyline>
       				<polyline class="poly poly2" style="file:none;stroke:black;stoke-width:3"></polyline>
@@ -24,8 +32,12 @@
     			<div class="cir cir3"></div>
 			</div>
 			
-			<form id="createForm" action="/angle/measure/create/<c:out value='${ empty prevValue.bno ? bno : prevValue.bno }'/> " method="post" enctype="multipart/form-data" class="col-12 col-lg-8 my-4 mx-auto">
+			<form id="modifyForm" action="/angle/angleDetail/<c:out value='${ empty prevValue.uuid ? angle.uuid : prevValue.uuid }'/> " method="post" enctype="multipart/form-data" class="col-12 col-lg-8 my-4 mx-auto">
 				<input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" />
+				<input type="hidden" name="bno" value="<c:out value='${ empty prevValue.bno ? board.bno : prevValue.bno }' />" />
+				<input type="hidden" name="uploadPath" value="<c:out value='${ empty prevValue.uploadPath ? angle.uploadPath : prevValue.uploadPath }' />" />
+				<input type="hidden" name="fileName" value="<c:out value='${ empty prevValue.fileName ? angle.fileName : prevValue.fileName }' />" />
+				<input type="hidden" name="writer" value="<c:out value='${ board.writer }' />" />
 				<input type="hidden" name="pageNum" value="<c:out value='${ cri.pageNum }' />" />
 				<input type="hidden" name="amount" value="<c:out value='${ cri.amount }' />" />
 				<input type="hidden" name="type" value="<c:out value='${ cri.type }' />" />
@@ -33,19 +45,23 @@
 				<div class="form-group">
 					<label for="id_angleFile" class="text-primary">파일*</label>
 					<!-- input file multiple 삭제 -->
-					<input type="file" name="angleFile" id="id_angleFile" accept="image/*" required class="form-control" />
+					<input type="file" name="angleFile" id="id_angleFile" accept="image/*" class="form-control" />
 					<c:forEach var="error" items="${ validation.uuidResult }">
 						<p class="text-danger warning"><c:out value="${ error }" /></p>
 					</c:forEach>
 					<c:forEach var="error" items="${ validation.bnoResult }">
 						<p class="text-danger warning"><c:out value="${ error }" /></p>
 					</c:forEach>
-					<c:forEach var="error" items="${ validation.uploadPathResult }">
+					<c:forEach var="error" items="${ validation.uuidResult }">
 						<p class="text-danger warning"><c:out value="${ error }" /></p>
 					</c:forEach>
-					<c:forEach var="error" items="${ validation.fileNameResult }">
-						<p class="text-danger warning"><c:out value="${ error }" /></p>
-					</c:forEach>
+				</div>
+				<div class="form-group">
+					<label for="id_originAngle">
+						기존 각도
+					</label>
+					<input type="number" name="originAngle" id="id_originAngle" class="form-control" readOnly value="<c:out value='${ angle.angle }'/>" />
+					<!--<input type="hidden" id="submitAngle" name="angleList[0].angle" />-->
 				</div>
 				<div class="form-group">
 					<label for="id_angle" class="text-primary">
@@ -53,12 +69,10 @@
 					</label>
 					<input type="number" name="angle" id="id_angle" class="form-control" readOnly />
 					<!--<input type="hidden" id="submitAngle" name="angleList[0].angle" />-->
-					<c:forEach var="error" items="${ validation.angleResult }">
-						<p class="text-danger warning"><c:out value="${ error }" /></p>
-					</c:forEach>
 				</div>
 				<div class="form-group text-center">
 					<input type="submit" class="btn btn-info" value="저장" />
+					<button id="deleteBtn" class="btn btn-danger ml-3">삭제</button>
 				</div>
 			</form>
 		</div>
@@ -68,17 +82,29 @@
 		<script src="/resources/js/utils.js"></script>
 		<script>
 			$(document).ready(function(){
+				var modifyForm = $("#modifyForm");
 				
-				$("#createForm").submit(function(e){
+				$(".img").each(function(index, item){
+					//console.log($(item).data("filename"));
+					var fileCallPath = encodeURIComponent($(item).data("uploadpath") + "/" + $(item).data("uuid") + "_" + $(item).data("filename"));
+					$(item).attr("src", "/angle/display?fileName=" + fileCallPath);
+				});
+				
+				modifyForm.submit(function(e){
 					var angleFileVal = $("#id_angleFile").val();
 					var angleVal = $("#id_angle").val();
 					
-					if(!utils.isEmptyCheck(angleFileVal.trim(), "파일")){
-						return false;
-					}
-					
 					if(!utils.isEmptyCheck(angleVal.trim(), "각도")){
 						return false;
+					}
+				});
+				
+				$("#deleteBtn").on("click", function(e){
+					e.preventDefault();
+					if(confirm("정말로 삭제하시겠습니까?")){
+						var deleteUrl = modifyForm.attr("action").replace("angleDetail", "angleDelete");
+						modifyForm.attr("action", deleteUrl);
+						modifyForm.submit();
 					}
 					
 				});

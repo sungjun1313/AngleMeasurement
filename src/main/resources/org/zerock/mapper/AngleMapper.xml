@@ -27,4 +27,53 @@
 		values (#{uuid}, #{bno}, #{angle}, #{uploadPath}, #{fileName})
 	</insert>
 	
+	<resultMap type="org.zerock.domain.BoardVO" id="boardMap">
+		<id property="bno" column="bno" />
+		<result property="bno" column="bno" />
+		<result property="writer" column="writer" />
+		<collection property="angleList" resultMap="angleMap"></collection>
+	</resultMap>
+	
+	<resultMap type="org.zerock.domain.AngleVO" id="angleMap">
+		<result property="uuid" column="uuid" />
+		<result property="angle" column="angle" />
+		<result property="uploadPath" column="uploadpath" />
+		<result property="fileName" column="filename" />
+	</resultMap>
+	
+	<select id="readAngleWithBoard" resultMap="boardMap">
+	 SELECT
+		bo.bno, bo.writer, an.uuid, an.angle, an.uploadpath, an.filename
+	FROM
+		tbl_board bo JOIN tbl_angle an on bo.bno = an.bno
+	WHERE
+		an.uuid = #{uuid}
+	</select>
+	
+	<update id="modify">
+		update tbl_angle
+		set angle=#{angle}, uploadpath=#{uploadPath}, filename=#{fileName}
+		where uuid = #{uuid} 
+	</update>
+	
+	<delete id="remove">
+		delete from tbl_angle where uuid = #{uuid}
+	</delete>
+	
+	<delete id="removeAll">
+		delete from tbl_angle where bno = #{bno}
+	</delete>
+	
+	<select id="getListByBno" resultType="org.zerock.domain.AngleVO">
+		select
+			uuid, bno, angle, uploadpath, filename
+		from
+			tbl_angle
+		where bno = #{bno}
+	</select>
+	
+	<select id="getOldFiles" resultType="org.zerock.domain.AngleVO">
+		select * from tbl_angle where uploadpath = to_char(sysdate - 1, 'yyyy\mm\dd')
+	</select>
+	
 </mapper>

@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.zerock.domain.AngleVO;
+import org.zerock.domain.BoardVO;
 import org.zerock.mapper.AngleMapper;
 import org.zerock.mapper.BoardMapper;
 import org.zerock.domain.Criteria;
@@ -145,6 +146,9 @@ public class AngleServiceImpl implements AngleService {
 		
 		HashMap<String, String> prevValue = new HashMap<String, String>();
 		prevValue.put("bno", Long.toString(bno));
+		prevValue.put("uuid", uuid);
+		prevValue.put("uploadPath", uploadPath);
+		prevValue.put("fileName", fileName);
 		
 		model.addAttribute("validation", map);
 		model.addAttribute("prevValue", prevValue);
@@ -160,7 +164,7 @@ public class AngleServiceImpl implements AngleService {
 	
 	//파일은 전송한다.
 	@Override
-	public HashMap<String, String> fileUpload(MultipartFile multipartFile){
+	public HashMap<String, String> fileUpload(MultipartFile multipartFile, String existUuid){
 		HashMap<String, String> map = new HashMap();
 		if(multipartFile.isEmpty()) {
 			map.put("success", "fail");
@@ -180,15 +184,15 @@ public class AngleServiceImpl implements AngleService {
 		log.warn("only file name: " + uploadFileName);
 		map.put("fileName", uploadFileName);
 		
-		UUID uuid = UUID.randomUUID();
+		String uuid = existUuid == null ? UUID.randomUUID().toString() : existUuid;
 
-		uploadFileName = uuid.toString() + "_" + uploadFileName;
+		uploadFileName = uuid + "_" + uploadFileName;
 		
 		try {
 			File saveFile = new File(uploadPath, uploadFileName);
 			if(checkImageType(saveFile)) {
 				multipartFile.transferTo(saveFile);
-				map.put("uuid", uuid.toString());
+				map.put("uuid", uuid);
 				map.put("uploadPath", uploadFolderPath);
 				
 				FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
@@ -207,5 +211,60 @@ public class AngleServiceImpl implements AngleService {
 		}
 		
 		return map;
+	}
+	
+	//파일 객체를 가져온다.
+	@Override
+	public File readFile(String fileName) {
+		return new File(AngleService.UPLOADPATH + fileName);
+	}
+	
+	//게시판과 해당 각도 측정 객체를 가져온다.
+	@Override
+	public BoardVO readAngleWithBoard(String uuid) {
+		return angleMapper.readAngleWithBoard(uuid);
+	}
+	
+	//각도 측정 객체를 수정한다,
+	@Override
+	public int modify(AngleVO angleVO) {
+		return angleMapper.modify(angleVO);
+	}
+	
+	//각도 측정 객체를 수정한다.
+	@Transactional
+	@Override
+	public int modify(AngleVO angleVO, AngleVO newAngleVO) {
+		angleMapper.remove(angleVO.getUuid());
+		int result = angleMapper.insert(newAngleVO);
+		return result;
+	}
+	
+	//파일을 삭제한다.
+	@Override
+	public void deleteFile(String uploadPath, String uuid, String fileName) {
+		File file = new File(AngleService.UPLOADPATH + uploadPath + "//s_" + uuid + "_" + fileName);
+		file.delete();
+		String largeFile = file.getAbsolutePath().replace("s_", "");
+		file = new File(largeFile);
+		file.delete();
+	}
+	
+	//각도 측정 객체를 삭제한다.
+	@Override
+	public int remove(String uuid) {
+		return angleMapper.remove(uuid);
+	}
+	
+	//게시판 관련 각도 측정 객체를 모두 가져온다.
+	@Override
+	public List<AngleVO> getListByBno(Long bno){
+		return angleMapper.getListByBno(bno);
+	}
+	
+	//전날 각도 측정 객체를 가져온다.
+	@Override
+	public List<AngleVO> getOldFiles(){
+		return angleMapper.getOldFiles();
 	}
 }

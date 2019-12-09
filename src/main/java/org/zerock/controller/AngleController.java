@@ -1,13 +1,20 @@
 package org.zerock.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -139,7 +146,7 @@ public class AngleController {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/measure/create/{bno}")
 	public String postMeasureCreate(@PathVariable("bno") Long bno, AngleVO angleVO, @ModelAttribute("cri") Criteria cri, Model model, Authentication auth, RedirectAttributes rttr) {
-		HashMap <String, String> map = angleService.fileUpload(angleVO.getAngleFile());
+		HashMap <String, String> map = angleService.fileUpload(angleVO.getAngleFile(), null);
 		angleVO.setBno(bno);
 		if(map.get("success").equals("success")) {
 			String uuid = map.get("uuid");
@@ -163,4 +170,124 @@ public class AngleController {
 		
 		return "angle/measureCreate";
 	}
+	
+	//  /angle/display?fileName=  이미지 출력
+	@GetMapping("/display")
+	@ResponseBody
+	public ResponseEntity<byte[]> getFile(String fileName){
+		log.info("fileName : " + fileName);
+		File file = angleService.readFile(fileName);
+		ResponseEntity<byte[]> result = null;
+		
+		try {
+			HttpHeaders header = new HttpHeaders();
+
+			header.add("Content-Type", Files.probeContentType(file.toPath()));
+			result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	//  /angle/angleDetail/uuid 각도 측정 객체 디테일 및 수정 페이지
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/angleDetail/{uuid}")
+	public String ageAngleDetail(@PathVariable("uuid") String uuid, @ModelAttribute("cri") Criteria cri, Model model, Authentication auth, RedirectAttributes rttr) {
+		log.info("angleDetail");
+		BoardVO boardVO = angleService.readAngleWithBoard(uuid);
+		
+		CustomUser user = (CustomUser)auth.getPrincipal();
+		MemberVO member = user.getMember();
+		if(member.getUserId().equals(boardVO.getWriter())) {
+			model.addAttribute("board", boardVO);
+			model.addAttribute("angle", boardVO.getAngleList().get(0));
+			return "angle/measureDetail";
+		}
+		
+		rttr.addFlashAttribute("result", "해당 게시물에 권한이 없습니다.");
+		return "redirect:/angle/list" + cri.getListLink();
+	}
+	
+	//  /angle/angleDetail/uuid 각도 측정 수정 post 요청 처리 
+	@PreAuthorize("principal.member.userId == #writer")
+	@PostMapping("/angleDetail/{uuid}")
+	public String postAngleDetail(AngleVO angleVO, @PathVariable("uuid") String uuid, @RequestParam("writer") String writer, @ModelAttribute("cri") Criteria cri, Model model, Authentication auth, RedirectAttributes rttr) {
+		MultipartFile file = angleVO.getAngleFile();
+		
+		int result = 0;
+		angleVO.setUuid(uuid);
+		if(file.isEmpty()) {
+			result = angleService.modify(angleVO);
+		}else {
+			HashMap <String, String> map = angleService.fileUpload(file, uuid);
+			if(map.get("success").equals("success")) {
+				String oldUploadPath = angleVO.getUploadPath();
+				String oldFileName = angleVO.getFileName();
+				
+				String uploadPath = map.get("uploadPath");
+				String fileName = map.get("fileName");
+				angleVO.setUploadPath(uploadPath);
+				angleVO.setFileName(fileName);
+				if(angleService.angleValidation(angleVO, model, "modify")) {
+					result = angleService.modify(angleVO);
+					angleService.deleteFile(oldUploadPath, uuid, oldFileName);
+				}
+			}else {
+				log.info("파일 업로드 실패");
+				model.addAttribute("message", "잘못된 파일이거나 서버 에러로 파일 업로드에 실패하였습니다.");
+			}
+		}
+		
+		if(result == 1) {
+			rttr.addFlashAttribute("result", angleVO.getBno() + "번 게시물에 각도 측정 결과가 수정되었습니다.");
+			return "redirect:/angle/list" + cri.getListLink();
+		}
+		
+		model.addAttribute("message", "서버 에러로 파일 업로드에 실패하였습니다.");
+		BoardVO newBoardVO = new BoardVO();
+		newBoardVO.setWriter(writer);
+		model.addAttribute("board", newBoardVO);
+		
+		
+		return "angle/measureDetail";
+	}
+	
+	//  /angle/angleDelete/uuid 각도 측정 삭제 post 요청 처리 
+	@PreAuthorize("principal.member.userId == #writer")
+	@PostMapping("/angleDelete/{uuid}")
+	public String postAngleDelete(@PathVariable("uuid") String uuid, AngleVO angleVO, @RequestParam("writer") String writer, @ModelAttribute("cri") Criteria cri, Model model, RedirectAttributes rttr) {
+		int result = angleService.remove(uuid);
+		if(result == 1) {
+			angleService.deleteFile(angleVO.getUploadPath(), uuid, angleVO.getFileName());
+			rttr.addFlashAttribute("result", angleVO.getBno() + "번 게시물에 각도 측정 결과가 삭제되었습니다.");
+			return "redirect:/angle/list" + cri.getListLink();
+		}
+		
+		rttr.addFlashAttribute("message", "서버 에러로 각도 측정 결과를 삭제하는데 실패하였습니다.");
+		return "redirect:/angle/angleDetail/" + uuid + cri.getListLink();
+	}
+	
+	//  /angle/delete 게시물 객체 삭제 post 요청 처리
+	@PreAuthorize("principal.member.userId == #boardVO.writer")
+	@PostMapping("/angle/delete")
+	public String postDelete(BoardVO boardVO, @ModelAttribute("cri") Criteria cri, Model model, RedirectAttributes rttr) {
+		List<AngleVO> angleList = angleService.getListByBno(boardVO.getBno());
+		int result = boardService.remove(boardVO.getBno());
+		
+		if(result == 1) {
+			
+			angleList.forEach(angle -> {
+				angleService.deleteFile(angle.getUploadPath(), angle.getUuid(), angle.getFileName());
+			});
+			
+			rttr.addFlashAttribute("result", boardVO.getBno() + "번 게시물에 각도 측정 결과가 삭제되었습니다.");
+			return "redirect:/angle/list" + cri.getListLink();
+		}
+		
+		rttr.addFlashAttribute("message", "서버 에러로 게시물 삭제에 실패하였습니다.");
+		return "redirect:/angle/detail" + boardVO.getBno() + cri.getListLink();
+	}
+	
 }

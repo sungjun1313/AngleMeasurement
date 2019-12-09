@@ -29,11 +29,22 @@
 						각도 측정
 					</div>
 					<div class="card-body">
-						<c:forEach items="${angleList }" var="angle">
-							<p>
-								<c:out value="${ angle.angle }" />
-							</p>
-						</c:forEach>
+						<div class="row">
+							<c:forEach items="${angleList }" var="angle">
+								<div class="col-12 col-sm-6 col-lg-4 text-center">
+									<div class="p-3">
+										<img class="thumbImg customPointer" style="height:100px;" src="/resources/images/no_image.png"
+										data-uploadpath="<c:out value='${ angle.uploadPath }' />" data-uuid="<c:out value='${ angle.uuid }' />"
+										data-filename="<c:out value='${ angle.fileName }' />"
+										alt="각도 측정 이미지"
+										 />
+									</div>
+									<div class="p-1">
+										<c:out value="${ angle.angle }" /> deg
+									</div>
+								</div>
+							</c:forEach>
+						</div>
 					</div>
 				</div>
 				
@@ -50,6 +61,12 @@
 			
 				<form id="deleteForm" action="/angle/delete" method="post">
 					<input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" />
+					<input type="hidden" name="bno" value="<c:out value='${ board.bno }'/>"/>
+					<input type="hidden" name="writer" value="<c:out value='${ board.writer }'/>"/>
+					<input type="hidden" name="pageNum" value="<c:out value='${ cri.pageNum }'/>"/>
+					<input type="hidden" name="amount" value="<c:out value='${ cri.amount }'/>"/>
+					<input type="hidden" name="type" value="<c:out value='${ cri.type }'/>"/>
+					<input type="hidden" name="keyword" value="<c:out value='${ cri.keyword }'/>"/>
 				</form>
 			
 				<form id="listForm" action="/angle/list" method="get">
@@ -65,6 +82,7 @@
 		<script>
 			$(document).ready(function(){
 				var listForm = $("#listForm");
+				var deleteForm = $("#deleteForm");
 				
 				$("#listBtn").on("click",function(e){
 					e.preventDefault();
@@ -75,6 +93,25 @@
 					e.preventDefault();
 					listForm.attr("action", $(this).attr("href"));
 					listForm.submit();
+				});
+				
+				$(".thumbImg").each(function(index, item){
+					//console.log($(item).data("filename"));
+					var fileCallPath = encodeURIComponent($(item).data("uploadpath") + "/s_" + $(item).data("uuid") + "_" + $(item).data("filename"));
+					$(item).attr("src", "/angle/display?fileName=" + fileCallPath);
+				});
+				
+				$(".thumbImg").on("click", function(){
+					var uuid = $(this).data("uuid");
+					listForm.attr("action", "/angle/angleDetail/"+uuid);
+					listForm.submit();
+				});
+				
+				$("#deleteBtn").on("click", function(e){
+					e.preventDefault();
+					if(confirm("정말로 삭제하시겠습니까?")){
+						deleteForm.submit();
+					}
 				});
 			});
 		</script>

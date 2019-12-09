@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.zerock.domain.AngleVO;
+import org.zerock.domain.BoardVO;
 import org.zerock.domain.Criteria;
 
 public interface AngleMapper {
@@ -17,4 +18,22 @@ public interface AngleMapper {
 	
 	//각도 측정 객체를 추가한다.
 	public int insert(AngleVO angleVO);
+	
+	//게시판과 해당 각도 측정 객체를 가져온다.
+	public BoardVO readAngleWithBoard(String uuid);
+	
+	//각도 측정 객체를 수정한다.
+	public int modify(AngleVO angleVO);
+	
+	//각도 측정 객체를 삭제한다.
+	public int remove(String uuid);
+	
+	//게시판 관련 각도 측정 객체를 모두 삭제한다.
+	public int removeAll(Long bno);
+	
+	//게시판 관련 각도 측정 객체를 모두 가져온다.
+	public List<AngleVO> getListByBno(Long bno);
+	
+	//전날 파일 정보를 가져온다.
+	public List<AngleVO> getOldFiles();
 }

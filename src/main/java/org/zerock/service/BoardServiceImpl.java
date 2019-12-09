@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.zerock.domain.BoardVO;
 import org.zerock.domain.Criteria;
+import org.zerock.mapper.AngleMapper;
 import org.zerock.mapper.BoardMapper;
 
 //import lombok.AllArgsConstructor;
@@ -22,6 +23,9 @@ public class BoardServiceImpl implements BoardService {
 
 	@Setter(onMethod_ = { @Autowired })
 	private BoardMapper boardMapper;
+	
+	@Setter(onMethod_ = { @Autowired })
+	private AngleMapper angleMapper;
 	
 	//게시판 객체를 모두 가져온다.
 	@Override
@@ -131,6 +135,14 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public int modify(BoardVO boardVO) {
 		return boardMapper.update(boardVO);
+	}
+	
+	//게시판 객체를 삭제한다.
+	@Transactional
+	@Override
+	public int remove(Long bno) {
+		angleMapper.removeAll(bno);
+		return boardMapper.remove(bno);
 	}
 	
 }

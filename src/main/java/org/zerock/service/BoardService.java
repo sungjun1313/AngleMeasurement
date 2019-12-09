@@ -22,4 +22,6 @@ public interface BoardService {
 	
 	public int modify(BoardVO boardVO);
 	
+	public int remove(Long bno);
+	
 }

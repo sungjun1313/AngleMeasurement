@@ -27,4 +27,7 @@ public interface BoardMapper {
 	
 	//게시판이 존재하는 지 확인
 	public int isExistBoard(Long bno);
+	
+	//게시판 삭제
+	public int remove(Long bno);
 }

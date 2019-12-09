@@ -216,6 +216,15 @@ function checkImgType(el){
   }
 }
 
+//이미지 사이즈 체크
+function checkImgSize(el){
+  if(el.size > 20971520){
+    return false;
+  }else{
+    return true;
+  }
+}
+
 //이미지 삽입
 function insertImg(file){
   var divLength = childrenLength(result);
@@ -239,23 +248,35 @@ function insertImg(file){
   result.insertBefore(div, null);
 }
 
+//폼 초기화
+function initForm(el){
+	result.innerHTML = '';
+	el.value = '';
+}
+
 //이미지 업로드
 function uploadImg(e){
   if(checkImgEnv){
     var selectFile = e.target.files[0];
-    if(!checkImgType){
-      console.log('이미지 파일만 가능합니다.');
-      return false;
-    }
-
-    //var picReader = new FileReader();
+    
     if(selectFile){
-      insertImg(selectFile);
+    	if(!checkImgType(selectFile)){
+    	      alert("이미지 파일만 가능합니다.");
+    	      initForm(this);
+    	      return false;
+    	}
+    	
+    	if(!checkImgSize(selectFile)){
+        	alert("20MB 보다 큰 이미지 파일은 전송할 수 없습니다.");
+        	initForm(this);
+        	return false;
+        }
+    	
+    	insertImg(selectFile);
     }else{
-      result.innerHTML = '';
+    	initForm(this);
     }
-
-
+    
   }else{
     console.log('최신 크롬 브라우저를 사용해주세요.');
   }

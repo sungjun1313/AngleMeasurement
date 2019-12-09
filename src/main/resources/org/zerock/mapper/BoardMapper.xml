@@ -90,4 +90,8 @@
 		where bno = #{bno}
 	</select>
 	
+	<delete id="remove">
+		delete from tbl_board where bno = #{bno}
+	</delete>
+	
 </mapper>
