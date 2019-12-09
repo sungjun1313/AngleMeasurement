@@ -5,7 +5,7 @@
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <sec:authentication property="principal" var="pinfo" />
 <layout:extends name="base">
-	<layout:put block="title">로그아웃페이지</layout:put>
+	<layout:put block="title">프로필</layout:put>
 	<layout:put block="content">
 		<div class="container">
 			<div class="mx-auto my-5 col-12 col-lg-8 border border-success rounded p-4">

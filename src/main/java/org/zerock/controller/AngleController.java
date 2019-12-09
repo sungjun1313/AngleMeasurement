@@ -158,7 +158,7 @@ public class AngleController {
 			if(angleService.angleValidation(angleVO, model, "create")) {
 				int result = angleService.register(angleVO);
 				if(result == 1) {
-					rttr.addFlashAttribute("result", angleVO.getBno() + "번 게시물에 각도 측정 결과가 추가되었습니다.");
+					rttr.addFlashAttribute("result", angleVO.getBno() + "번 게시물의 각도 측정 결과가 추가되었습니다.");
 					return "redirect:/angle/list" + cri.getListLink();
 				}
 				model.addAttribute("message", "서버 에러로 파일 업로드에 실패하였습니다.");
@@ -241,7 +241,7 @@ public class AngleController {
 		}
 		
 		if(result == 1) {
-			rttr.addFlashAttribute("result", angleVO.getBno() + "번 게시물에 각도 측정 결과가 수정되었습니다.");
+			rttr.addFlashAttribute("result", angleVO.getBno() + "번 게시물의 각도 측정 결과가 수정되었습니다.");
 			return "redirect:/angle/list" + cri.getListLink();
 		}
 		
@@ -261,7 +261,7 @@ public class AngleController {
 		int result = angleService.remove(uuid);
 		if(result == 1) {
 			angleService.deleteFile(angleVO.getUploadPath(), uuid, angleVO.getFileName());
-			rttr.addFlashAttribute("result", angleVO.getBno() + "번 게시물에 각도 측정 결과가 삭제되었습니다.");
+			rttr.addFlashAttribute("result", angleVO.getBno() + "번 게시물의 각도 측정 결과가 삭제되었습니다.");
 			return "redirect:/angle/list" + cri.getListLink();
 		}
 		
@@ -282,7 +282,7 @@ public class AngleController {
 				angleService.deleteFile(angle.getUploadPath(), angle.getUuid(), angle.getFileName());
 			});
 			
-			rttr.addFlashAttribute("result", boardVO.getBno() + "번 게시물에 각도 측정 결과가 삭제되었습니다.");
+			rttr.addFlashAttribute("result", boardVO.getBno() + "번 게시물이 삭제되었습니다.");
 			return "redirect:/angle/list" + cri.getListLink();
 		}
 		

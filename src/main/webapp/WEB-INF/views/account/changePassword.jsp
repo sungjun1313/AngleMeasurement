@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://kwonnam.pe.kr/jsp/template-inheritance" prefix="layout" %>
 <layout:extends name="base">
-	<layout:put block="title">로그아웃페이지</layout:put>
+	<layout:put block="title">비밀번호 변경</layout:put>
 	<layout:put block="content">
 		<div class="container">
 			<h3 class="mt-5 mb-3 text-center text-info">비밀번호 변경</h3>
