@@ -100,9 +100,9 @@
 	</ul>
 	<!-- 클릭 시 form sumbit -->
 	<form id="pagenationForm" action="/angle/list" method="get">
-		<input type="hidden" name="pageNum" value="<c:out value='${ pageMaker.cri.pageNum }'/>" />
-		<input type="hidden" name="amount" value="<c:out value='${ pageMaker.cri.amount }'/>" />
-		<input type="hidden" name="type" value="<c:out value='${ pageMaker.cri.type }'/>" />
-		<input type="hidden" name="keyword" value="<c:out value='${ pageMaker.cri.keyword }'/>" />
+		<input type="hidden" name="pageNum" value="<c:out value='${ empty cri ? pageMaker.cri.pageNum : cri.pageNum }'/>" />
+		<input type="hidden" name="amount" value="<c:out value='${ empty cri ? pageMaker.cri.amount : cri.amount }'/>" />
+		<input type="hidden" name="type" value="<c:out value='${ empty cri ? pageMaker.cri.type : cri.type }'/>" />
+		<input type="hidden" name="keyword" value="<c:out value='${ empty cri ? pageMaker.cri.keyword :cri.keyword }'/>" />
 	</form>
 </nav>

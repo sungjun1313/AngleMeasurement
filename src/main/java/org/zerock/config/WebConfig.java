@@ -54,10 +54,10 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 		registration.setInitParameter("throwExceptionIfNoHandlerFound", "true");
 		
 		MultipartConfigElement multipartConfig = new MultipartConfigElement(
-				"C:\\Users\\JLPartner\\Desktop\\spring3\\upload\\tmp",
-				20971520,
-				41943040,
-				20971520
+				FileConfig.PATH,
+				FileConfig.MAX_FILE_SIZE,
+				FileConfig.MAX_REQUEST_SIZE,
+				FileConfig.FILE_SIZE_THRESHOLD
 				);
 		registration.setMultipartConfig(multipartConfig);
 	}

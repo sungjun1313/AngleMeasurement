@@ -42,12 +42,12 @@
 	</resultMap>
 	
 	<select id="readAngleWithBoard" resultMap="boardMap">
-	 SELECT
-		bo.bno, bo.writer, an.uuid, an.angle, an.uploadpath, an.filename
-	FROM
-		tbl_board bo JOIN tbl_angle an on bo.bno = an.bno
-	WHERE
-		an.uuid = #{uuid}
+		select
+			bo.bno, bo.writer, an.uuid, an.angle, an.uploadpath, an.filename
+		from
+			tbl_board bo JOIN tbl_angle an on bo.bno = an.bno
+		where
+			an.uuid = #{uuid}
 	</select>
 	
 	<update id="modify">
@@ -69,11 +69,20 @@
 			uuid, bno, angle, uploadpath, filename
 		from
 			tbl_angle
-		where bno = #{bno}
+		where
+			bno = #{bno}
 	</select>
 	
 	<select id="getOldFiles" resultType="org.zerock.domain.AngleVO">
-		select * from tbl_angle where uploadpath = to_char(sysdate - 1, 'yyyy\mm\dd')
+		select * 
+		from tbl_angle 
+		where uploadpath = to_char(sysdate - 1, 'yyyy\mm\dd')
+	</select>
+	
+	<select id="getTotalCount" resultType="int">
+		select count(*)
+		from tbl_angle
+		where bno = #{bno}
 	</select>
 	
 </mapper>

@@ -11,7 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @ToString
 public class Criteria {
 
-	//페이징 기준이 되는 변수들 -> 현재 페이지, 총 개수, 타입, 검색조건
+	//페이징 기준이 되는 변수들 -> 현재 페이지, 보여줄 개수, 검색타입, 검색조건
 	private int pageNum;
 	private int amount;
 	
@@ -33,10 +33,10 @@ public class Criteria {
 	
 	public String getListLink() {
 		UriComponentsBuilder builder = UriComponentsBuilder.fromPath("")
-				.queryParam("pageNum", this.getPageNum())
-				.queryParam("amount", this.getAmount())
-				.queryParam("type", this.getType())
-				.queryParam("keyword", this.getKeyword());
+											.queryParam("pageNum", this.getPageNum())
+											.queryParam("amount", this.getAmount())
+											.queryParam("type", this.getType())
+											.queryParam("keyword", this.getKeyword());
 		
 		return builder.toUriString();
 	}

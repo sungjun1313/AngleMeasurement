@@ -23,8 +23,9 @@ public class CommonExceptionAdvice {
 		log.error("Exception: " + ex.getMessage());
 		model.addAttribute("exception", ex);
 		if (ex instanceof AccessDeniedException || ex instanceof AuthenticationException) {
-            return "/errors/access_denied";
-        }
+			return "/errors/access_denied";
+		}
+		
 		return "/errors/error_page";
 	}
 	

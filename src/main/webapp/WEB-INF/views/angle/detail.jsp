@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://kwonnam.pe.kr/jsp/template-inheritance" prefix="layout" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -29,7 +29,7 @@
 						각도 측정
 					</div>
 					<div class="card-body">
-						<div class="row">
+						<div class="row" id="restBody" data-bno="<c:out value='${ board.bno }'/>">
 							<c:forEach items="${angleList }" var="angle">
 								<div class="col-12 col-sm-6 col-lg-4 text-center">
 									<div class="p-3">
@@ -45,6 +45,14 @@
 								</div>
 							</c:forEach>
 						</div>
+					</div>
+					<div class="card-footer">
+						<!--
+							pagination 조건
+							spring -> model key:pageMaker value:PageDTO, Key:cri value:Criteria
+							jQuery -> resources/js/restPagination.js 
+						 -->
+						 <%@ include file="../utils/pagination.jsp" %>
 					</div>
 				</div>
 				
@@ -79,6 +87,7 @@
 		</div>
 	</layout:put>
 	<layout:put block="js">
+		<script src="/resources/js/restPagination.js"></script>
 		<script>
 			$(document).ready(function(){
 				var listForm = $("#listForm");
@@ -101,7 +110,7 @@
 					$(item).attr("src", "/angle/display?fileName=" + fileCallPath);
 				});
 				
-				$(".thumbImg").on("click", function(){
+				$("#restBody").on("click", ".thumbImg", function(){
 					var uuid = $(this).data("uuid");
 					listForm.attr("action", "/angle/angleDetail/"+uuid);
 					listForm.submit();

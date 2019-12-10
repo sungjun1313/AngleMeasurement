@@ -21,11 +21,11 @@
 	</resultMap>
 	
 	<select id="read" resultMap="memberMap">
-		SELECT
+		select
 			mem.userid, userpw, username, email, enabled, regdate, updatedate, lastlogin, auth
-		FROM
+		from
 			tbl_member mem LEFT OUTER JOIN tbl_member_auth auth on mem.userid = auth.userid
-		WHERE mem.userid = #{userId}
+		where mem.userid = #{userId}
 	</select>
 	
 	<insert id="register">

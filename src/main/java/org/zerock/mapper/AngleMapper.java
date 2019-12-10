@@ -34,6 +34,9 @@ public interface AngleMapper {
 	//게시판 관련 각도 측정 객체를 모두 가져온다.
 	public List<AngleVO> getListByBno(Long bno);
 	
-	//전날 파일 정보를 가져온다.
+	//전날 각도 측정 객체를 가져온다.
 	public List<AngleVO> getOldFiles();
+	
+	//게시판 관련 각도 측정 객체 총 개수를 가져온다.
+	public int getTotalCount(Long bno);
 }

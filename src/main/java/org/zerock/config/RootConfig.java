@@ -52,7 +52,7 @@ public class RootConfig {
 		return (SqlSessionFactory) sqlSessionFactory.getObject();
 	}
 	
-	//트랙잭션 설정
+	//transaction 설정
 	@Bean
 	public DataSourceTransactionManager txManager() {
 		return new DataSourceTransactionManager(dataSource());

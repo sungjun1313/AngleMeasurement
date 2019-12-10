@@ -20,8 +20,8 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 
 	//prevPage 없을 때 리다이렉트할 default url
 	public CustomLoginSuccessHandler() {
-        setDefaultTargetUrl("/angle/list");
-    }
+		setDefaultTargetUrl("/angle/list");
+	}
 	
 	//prevPage를 체크해서 prevPage가 존재하면 prevPage로 리다이렉트, 없으면 default url로 리다이렉트
 	@Override

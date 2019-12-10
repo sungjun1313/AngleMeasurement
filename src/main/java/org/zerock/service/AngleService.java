@@ -6,13 +6,14 @@ import java.util.List;
 
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+import org.zerock.config.FileConfig;
 import org.zerock.domain.AngleVO;
 import org.zerock.domain.BoardVO;
 import org.zerock.domain.Criteria;
 
 public interface AngleService {
 	
-	public static final String UPLOADPATH = "C:\\Users\\JLPartner\\Desktop\\spring3\\upload\\tmp\\";	
+	public static final String UPLOADPATH = FileConfig.PATH;	
 
 	public List<AngleVO> getList();
 	
@@ -39,5 +40,7 @@ public interface AngleService {
 	public List<AngleVO> getListByBno(Long bno);
 	
 	public List<AngleVO> getOldFiles();
+	
+	public int getTotalCount(Long bno);
 	
 }

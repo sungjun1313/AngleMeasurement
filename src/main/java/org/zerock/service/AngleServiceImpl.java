@@ -21,6 +21,7 @@ import org.zerock.domain.BoardVO;
 import org.zerock.mapper.AngleMapper;
 import org.zerock.mapper.BoardMapper;
 import org.zerock.domain.Criteria;
+import org.zerock.domain.PageDTO;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,8 @@ public class AngleServiceImpl implements AngleService {
 	@Setter(onMethod_ = { @Autowired })
 	private BoardMapper boardMapper;
 	
-	private boolean checkImageType(File file) {
+	//파일이 이미지인 지 확인한다.
+	public static boolean checkImageType(File file) {
 
 		try {
 			
@@ -52,7 +54,8 @@ public class AngleServiceImpl implements AngleService {
 		return false;
 	}
 	
-	private String getFolder() {
+	//날짜별 폴더 이름을 만든다.
+	public static String getFolder() {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -267,4 +270,11 @@ public class AngleServiceImpl implements AngleService {
 	public List<AngleVO> getOldFiles(){
 		return angleMapper.getOldFiles();
 	}
+	
+	//게시판 관련 각도 측정 객체 총 개수를 가져온다.
+	@Override
+	public int getTotalCount(Long bno) {
+		return angleMapper.getTotalCount(bno);
+	}
+	
 }

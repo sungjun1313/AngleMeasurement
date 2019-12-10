@@ -80,9 +80,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 		//여기서 UTF-8 세팅해준다.
 		CharacterEncodingFilter filter = new CharacterEncodingFilter();
-        filter.setEncoding("UTF-8");
-        filter.setForceEncoding(true);
-        http.addFilterBefore(filter,CsrfFilter.class);
+		filter.setEncoding("UTF-8");
+		filter.setForceEncoding(true);
+		http.addFilterBefore(filter,CsrfFilter.class);
         
 		//xml에서 url-intercept 역할
 		http.authorizeRequests()

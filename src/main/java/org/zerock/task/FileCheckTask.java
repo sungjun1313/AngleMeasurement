@@ -26,6 +26,7 @@ public class FileCheckTask {
 	@Setter(onMethod_ = { @Autowired })
 	private AngleService angleService;
 	
+	//전날 폴더 이름을 가져온다.
 	private String getFolderYesterDay() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar cal = Calendar.getInstance();
@@ -34,6 +35,7 @@ public class FileCheckTask {
 		return str.replace("-", File.separator);
 	}
 
+	//매일 새벽 2시에 실행
 	@Scheduled(cron="0 0 2 * * *")
 	public void checkFiles() throws Exception {
 		log.warn("File Check Task Run...................");
@@ -62,6 +64,7 @@ public class FileCheckTask {
 		File targetDir = Paths.get(angleService.UPLOADPATH, getFolderYesterDay()).toFile();
 		File[] removeFiles = targetDir.listFiles(file-> fileListPaths.contains(file.toPath()) == false);
 		
+		//files that are not match DB information delete
 		if(removeFiles != null) {
 			for(File file : removeFiles) {
 				log.warn(file.getAbsolutePath());

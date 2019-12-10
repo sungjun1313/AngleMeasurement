@@ -58,9 +58,15 @@ public class AngleController {
 	
 	//  /angle/detail/2  게시판 상세 페이지
 	@GetMapping("/detail/{bno}")
-	public String detail(@PathVariable("bno") Long bno, @ModelAttribute("cri") Criteria cri, Model model) {
+	public String detail(@PathVariable("bno") Long bno, @ModelAttribute("cri") Criteria cri, @RequestParam(value="anglePage", defaultValue="1") int anglePage, Model model) {
 		model.addAttribute("board", boardService.read(bno));
-		model.addAttribute("angleList", angleService.getListWithPaging(new Criteria(), bno));
+		
+		log.info(""+anglePage);
+		
+		Criteria angleCri = new Criteria(anglePage, 12);
+
+		model.addAttribute("angleList", angleService.getListWithPaging(angleCri, bno));
+		model.addAttribute("pageMaker", new PageDTO(angleCri, angleService.getTotalCount(bno)));
 		return "angle/detail";
 	}
 	
