@@ -10,7 +10,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="keywords" content="성준, 포트폴리오, 각도 측정, 스프링">
-        <meta name="description" content="성준, 포트폴리오, 각도 측정, 스프링">
+		<meta name="description" content="성준, 포트폴리오, 각도 측정, 스프링">
 		<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700" rel="stylesheet" />
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="/resources/css/base.css" />
