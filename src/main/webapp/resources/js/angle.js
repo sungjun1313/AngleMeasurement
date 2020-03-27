@@ -233,7 +233,7 @@ function insertImg(file){
   //console.log(url);
 
   var div = document.createElement("div");
-  if(!divLength == 0){
+  if(divLength !== 0){
     result.innerHTML = '';
   }
   var img = document.createElement("img");
@@ -256,7 +256,7 @@ function initForm(el){
 
 //이미지 업로드
 function uploadImg(e){
-  if(checkImgEnv){
+  if(checkImgEnv()){
     var selectFile = e.target.files[0];
     
     if(selectFile){
@@ -323,6 +323,15 @@ function domReady () {
   console.log('ready');
   window.addEventListener("resize", init, false);
   init();
+  
+  //object.addEventListener (eventName, function, useCapture);
+  //useCapture: Boolean that specifies whether the event needs to be captured or not. One of the following values
+  //useCapture(false) -> Register the event handler for the bubbling phase. 
+  //useCapture(true) -> Register the event handler for the capturing phase.
+  //bubbling phase: 대상에 도달한 후에 이벤트 처리
+  //capturing phase: 대상에 도달하기 전에 이벤트 처리
+  //드래그 이벤트는 container에 주고 container 안에서 드래그했을 때, 클릭한 원만 드래그 액션이
+  //적용될 수 있게 하기 위해서는 bubbling phase가 되야 하기 때문에 uspCapture은 false가 되야한다.
 
   //모바일 드래그
   container.addEventListener("touchstart", dragStart, false);
@@ -335,6 +344,6 @@ function domReady () {
   container.addEventListener("mousemove", drag, false);
 
   //이미지 업로드
-  fileInput.addEventListener("change", uploadImg, false);
+  fileInput.addEventListener("change", uploadImg);
 
 }
